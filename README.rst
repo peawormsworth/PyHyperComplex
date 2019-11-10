@@ -1,26 +1,55 @@
 HyperComplex
 ============
-HyperComplex provides a multi-dimensional Cayley-Dickson number calculator.
-It is easy to generate hypercomplex numbers of any 2^n dimensions.
-Add, subtract, multiiply and divide objects with overloaded math operations (just use: + - * /)
-Norm of any number is: 
-   asb(object)
-Inverse of any number is:
-   ~ object
+
+HyperComplex makes multi-dimensional Cayley-Dickson number calculations easy.
+Calculate to dimensions of any size with intuitive and fully overloaded math operation.
+
+
+Usage
+-----
+
+Create:
+
+import hypercomplex
+from hypercomplex import Construction
+
+c1 = Construction( 4, 2)
+c2 = Construction(-1, 0.5)
+
+quaternion = Construction(1,2,3,4)
+octonion   = Construction(-1,7,6,5,8,3,2,4)
+
+Display:
+
+print ("c1 = ", c1)
+print ("c2 = ", c2.flat())
+print ("Quaternion = ", quaternion)
+print ("Octonion   = ", c1.flat())
+
+Calculate:
+
+product     = c1 * c2
+difference  = c1 - c2
+equality    = c1 == c2
+q_norm      = abs(quaternion)
+o_normalize = octonion.normalize
+c2_inverse  = ~ c2
+c1_squared  = c1 ** 2
+root_c2     = c2 ** 0.5
+log_o       = log(o)
+negative_c1 = -c1
+
+# negate c1 and store it back into itself ...
+c1 *= -1
+
+# the 3rd element of the octonion...
+element3 = octonion[2]
+
+etc...
+
 
 Status
 ------
 
-This is a work in progress and only works for 2 dimensional (complex) numbers. The class is designed to handle numbers of any dimensional size. This will be fixed, because it already works in the perl version.
+Work in progress. Expect frequent and total changes.
 
-The two scripts in the main directory work and provide a starting point for further development.
-
-Untested features
------------------
-
-- Find powers (z^x) with: object ** x
-- easily switch objects between sign and doubling products. ie: Dual, Split and Bi-complex numbers
-- left vs right multiplication
-- self modifying overloading needs real work ( += *=, etc)
-- test, test, test -> move to real test suite
-- only complex numbers (2 dimensional) numbers work. The init function does not handle larger sets of numbers. The problem is the recursive function which needs to create a list of lists. I can't seem to get the lists to join right. I just don't understand iteratable sets and lists and their differences.
