@@ -1,24 +1,25 @@
 #
 #   hypercomplex.Construction
 #
-#   author: Jeffrey B Anderson - truejeffanderson at gmail.com
+#     python class for Cayley Dickson number construction and operation
 #
-#     based off: https://github.com/peawormsworth/Cayley-Dickson
-#     reference: https://en.wikipedia.org/wiki/Cayley-Dickson_construction
+#     source: https://github.com/peawormsworth/PyCayleyDickson
+#     author: Jeffrey B Anderson - truejeffanderson at gmail.com
 #
 
 import math
 
-# todo: this program depends on type checking.
-#   Apparently this ins not the python way.
-#   Is there a more standard way to achieve this effect?
 
-# todo: do we need to subclass object?
-#class Construction(object):
 class Construction:
 
     isquare = -1
-    PRECISION = 10 ** -9
+    precision = 10 ** -9
+
+
+
+    #
+    #  Addition: z1+z2 = (a,b)+(c,d) = (a+c,b+d)
+    #
 
     def __add__ (m, o):
         try:
@@ -29,27 +30,54 @@ class Construction:
         return m.__class__((a, b))
 
 
+
+    #
+    # reverse Addition
+    #
+
     def __radd__ (m, o):
         return m + o
 
 
-    def __rsub__ (m, o):
-        return -m+ o
 
+    #
+    # referse Subtract
+    #
+
+    def __rsub__ (m, o):
+        return -m + o
+
+
+    #
+    # Subtraction: (a,b)-(c,d) = (a-c,b-d)
+    #
 
     def __sub__ (m, o):
         return m + -o
 
 
+
+    #
+    # Reverse Multiplication
+    #
+
     def __rmul__ (m, o):
         return m * o
 
 
-# todo: is the disions in the right order for sure?
+
+    #
+    # Reverse Division
+    #
+
     def __rtruediv__ (m, o):
-# todo: verify inverse before multiplication ordering or add brackets...
         return ~m * o
 
+
+
+    #
+    # Division: z1/z2 = (a,b) × (c,d)⁻¹ = (a,b) × inverse(c,d)
+    #
 
     def __truediv__ (m, o):
         if isinstance(o, Construction):
@@ -58,8 +86,12 @@ class Construction:
             return 1/o * m
 
 
-# todo: multiplication ordering is not standardized.
-# are we using correct orders or should we swap. or make it a setting choice?
+
+    #
+    # Multiplication: (a,b)×(c,d) = (a×c - d*×b, d×a + b×c*) 
+    #   where x* = conjugate(x) or x if x is a number
+    #
+
     def __mul__ (m, o):
         a  = m.a
         b  = m.b
@@ -94,95 +126,164 @@ class Construction:
         except:
             dc = d
 
-        return m.__class__((a*c + m.isquare * dc*b, d*a + b*cc))
+        return m.__class__(m.doubling_product(a,b,c,d,ac,bc,cc,dc))
 
 
-# there is a short form for this. We could just square the coefficients add and take the root ...
-# this method is cool because it doesn't assume a standard structure...
+
+    #
+    # Doubling Product: multiplication rules for (a,b)×(c,d)
+    #   given the values a,b,c,d,a★,b★,c★,d★
+    #  where x★ = conjugate of x
+    #
+
+    def doubling_product (m,a,b,c,d,ac,bc,cc,dc):
+        return (a*c + m.isquare * dc*b, d*a + b*cc)
+
+
+
+    #
+    # Absolute Value = Norm: √(norm(a)²+norm(b)²)
+    #
+
     def __abs__ (m):
         return math.sqrt(abs(m.a) ** 2 + abs(m.b) ** 2)
 
 
-# note: order of multiplication is not important since one side is real ...
+
+    #
+    # Invert: z⁻¹
+    #
+
     def __invert__ (m):
         return m.conj() * (1 / (abs(m) ** 2))
 
 
-# todo: this doesn't work at all. Figure this out.
-# it is based on quaternion powers formula from wikipedia.
-# Search there to see what it should be.
-# todo: this can't be right. I guessed as some of this...
-    def __pow__ (m, power):
-        rm = m[0]
-        im = m.__class__(((0,) + m[1:]))
-        #print ("rm: ", rm)
-        #print ("im: ", im.flat())
-        return abs(m) ** power * (math.cos(power * abs(im)) + im.normalize() * math.sin(power * abs(im)))
-        #return math.exp(rm) * (math.cos(abs(im)) + im.normalize * math.sin(abs(im)))
 
+    #
+    # Power: z^x
+    #
+
+    def __pow__ (m, power):
+        return abs(m) ** power * (math.cos(power * abs(m.im())) + m.im().normalize() * math.sin(power * abs(m.im())))
+
+
+
+    #
+    # Negate: -z = -1 × z
+    #
 
     def __neg__ (m):
         return -1 * m
 
 
+
+    #
+    # Positive: +z = z
+    #
+
     def __pos__ (m):
         return m
 
 
-# todo: verify this works and test all the auto replace operations i*
+
+    #
+    # Replace: the existing coefficients with those of the given one
+    #
+
     def replace (m, o):
-        m.a(o.a)
-        m.b(o.b)
+        m.a(o.a())
+        m.b(o.b())
         return m
 
+
+
+    #
+    # Addition with assignment: z += x
+    #
 
     def __iadd__ (m, o):
         return m.replace(m.__add__(o))
 
 
+
+    #
+    # Subtraction with assignment: z -= x
+    #
+
     def __isub__ (m, o):
         return m.replace(m.__sub__(o))
 
+
+
+    #
+    # Multiplication with assignment: z *= x
+    #
 
     def __imul__ (m, o):
         return m.replace(m.__mul__(o))
 
 
+
+    #
+    # Division with assignment: z /= x
+    #
+
     def __idiv__ (m, o):
         return m.replace(m.__div__(o))
 
+
+
+    #
+    # Power with assignment: z **= x
+    #
 
     def __ipow__ (m, o):
         return m.replace(m.__pow__(o))
 
 
-    def __eq__ (m, o):
-        return (m - o).norm() <= m.precision()
 
+    #
+    # Equality condition: true if z = x
+    #
+
+    def __eq__ (m, o):
+        return (m - o).norm() <= m.precision
+
+
+
+    #
+    # Inequality: true is z ≠ x
+    #
 
     def __ne__ (m, o):
         return not m == o
 
 
-# todo: complex is totally untested and no idea how to test.
-#    if you know how coComplex pi numbers work... you may check this.
-# note: if the object is more than complex dimensions, 
-#    it will flatten it to its two dimensional probabilities 
-#    (it's root sum of squares) for each of the two branches 
-#    of the provided object.
+
+    #
+    #  automatically generate a Complex object using the weight of a and b 
+    #    as the real and imaginary components
+    #
 
     def __complex__ (m):
-       return PyComplex_FromDoubles( float(abs(m.a)), float(abs(m.b)) )
+       return complex( float(abs(m.a)), float(abs(m.b)) )
 
 
-# todo: untested. m.im and m.re are suspect too...
+
+    #
+    #  the power to which e mush be raised to obtain this number
+    #  if this number is z, then log(z) returns the x, so that e^x = z
+    #  Log: log(z) = x, so that e^x = z
+    #
+
     def log (m):
-        rm = m[0]
-        im = m.__class__(((0,) + m[1:]))
-        #print ("rm: ", rm)
-        #print ("im: ", im.flat())
-        return math.log(abs(m)) + im.normalize() * math.acos(rm / abs(m))
+        return math.log(abs(m.im())) + m.im().normalize() * math.acos(m.re() / abs(m))
 
+
+
+    # 
+    #  Conjugate: z* = (a,b)* = (a*,-b)
+    #
 
     def conj (m):
         try:
@@ -192,67 +293,103 @@ class Construction:
         return m.__class__((ac, -m.b))
 
 
+
+    #
+    # Norm: √(norm(a)²+norm(b)²) and norm(number) = number
+    #
+
     def norm (m):
         return abs(m)
 
+
+
+    #
+    # Normalize: z/|z| = zn, where norm of zn = 1
+    #
 
     def normalize (m):
         return m / abs(m)
 
 
-    def geodesic_norm (m, o):
-        return abs((o/m).log)
 
+    #
+    # Geodesic Norm: gn(z,x) = |ln(z⁻¹x)|
+    # ref: https://en.wikipedia.org/wiki/Quaternion#Geodesic_norm
+    #
+
+    def geodesic_norm (m, o):
+        return abs(log(~m * o))
+
+    #
+    # Tensor: $a->tensor($b) = A ⊗ B = (a,b) ⊗ (c,d) = (ac,ad,bc,bd)
+    #
 
     def tensor (m, o):
         try:
             return m.__class__((m.a.tensor(o), m.b.tensor(o)))
         except:
-            return m * o
+            return m.__class__((o * m.a,  o * m.b))
 
 
-# todo: i put this in and think it works. But I don't know if it's used or works as intended. Must first understand and then test.
-# note: it seems to work now like this for some reason...
+
+    #
+    # return the coefficient of the basis for the provided index
+    #
+
     def __getitem__ (m, i):
         return m.flat()[i]
 
 
+
+    #
+    # return an ordered list of the coefficients
+    #
+
     def flat (m):
-# todo: we have the __getitem__ iterable default. Could we just call m[::] instead ???
-        #m[::]
         try:
            return m.a.flat() + m.b.flat()
         except:
            return (m.a, m.b)
 
 
-# todo: test this if you want JSON dumping and object creation ...
+
+    #
+    # output this number as a string suitable for evaluation.
+    #   like json state format
+    #
     def __repl__ (m):
-        return m.__class__.__name__ + '(' + ','.join(str(x) for x in m) + ')'
+        return m.__class__.__name__ + '((' + ','.join(map(str, m.flat())) + '))'
 
 
-# this is one output form. It uses i,j,k,l,... for imaginary units
-# no basis is shown for real units
-# no leading +
+
+    #
+    # String format:
+    #   ordered imaginary units: i, j, k, etc.
+    #   no basis is shown for real units
+    #   no leading positive symbol
+    #
+
     def __str__ (m):
         string = ''
         if abs(m):
 
-            for index, t in enumerate(m.flat()):
+            for index, coefficient in enumerate(m.flat()):
 
-                sign = ''
-                if t < 0: 
-                    sign = '-' 
-                elif len(string):
-                    sign = '+'
+                if coefficient != 0: 
+                    sign = ''
+                    if coefficient < 0: 
+                        sign = '-' 
+                    elif len(string):
+                        sign = '+'
 
-                value = 0
-                if not(abs(t) == 1 and index):
-                    value = abs(t)
+                    value = abs(coefficient)
+    
+                    if index:
+                        unit = chr(ord('i') + index - 1)
+                    else:
+                        unit = ''
 
-                unit = chr(ord('i') + index)
-
-                string = string + sign + str(value) + unit
+                    string = string + sign + str(value) + unit
 
         if string is None:
             string = '0'
@@ -260,57 +397,84 @@ class Construction:
         return string
 
 
-# This is not saying that the object has 0 in the imaginary part
-# I have defined it more mathematically and I am unsure if it is totally true.
+
+    #
+    # confirm the imaginary portions of the number are zero
+    #
+
     def is_real (m):
-        return m == m.conj()
-# an alternate form may be ...
-        #return not abs(m.b)
+        return not m.im
 
 
-# todo: is it simpler just to count the dimensions?
-# ie:
-    def X_is_complex (m):
-        return m.dimension() == 2
 
-    def X_is_quaternion  (m):
-        return m.dimension() == 4
+    #
+    # return dimension count for this number
+    #
 
-    def X_is_octonion (m):
-        return m.dimension() == 8
+    def dimension(m):
+        return len(m.flat())
 
-    def X_is_sedenion (m):
-        return m.dimension() == 16 
+
+
+    #
+    # return the Cayley Dickson level for this number
+    # where level = log2(dim)
+    #   level 0 = 1d
+    #   level 1 = 2d
+    #   level 2 = 4d
+    #   level 3 = 8d
+    #   level 4 = 16d
+    #    ...etc...
+    #
+
+    def level (m):
+        return math.log(m.dimension())/math.log(2)
+
+
+
+    #
+    # confirm this number is a 2d Complex number
+    #
 
     def is_complex (m):
-        return not isinstance(m.a, Construction)
+        return m.level() == 1
 
 
-    def is_quaternion (m):
-        return not m.is_complex() and m.a.is_complex()
 
+    #
+    # confirm this number is a 4d Quaternion number
+    #
+
+    def is_quaternion  (m):
+        return m.level() == 2
+
+
+
+    #
+    # confirm this number is a 8d Octonion number
+    #
 
     def is_octonion (m):
-        return not m.is_complex() and m.a.is_quaternion()
+        return m.level() == 3
 
+
+
+    #
+    # confirm this number is a 16d Sedenion number
+    #
 
     def is_sedenion (m):
-        return not m.is_complex() and m.a.is_octonion()
+        return m.level() == 4
 
 
-# todo: is this a real name? I heard it somewhere and put it here, but I don't think it is standard. remove?
-    def is_trigintaduonions (m):
-        return not m.is_complex() and m.a.is_sedenion()
 
-    def dimension(m, c):
-        try:
-            return m.dimension() == c
-        except:
-            return len(m.flat())
+    #
+    # initialize a new object request
+    #   expects a 2^n element tuple parameter
+    #
 
+    def __init__ (m, list):
 
-    def __init__ (m, list, p=PRECISION):
-        m.precision(p)
         h = len(list) // 2
         if h > 1:
             m.a(m.__class__((list[:h])))
@@ -323,11 +487,21 @@ class Construction:
             m.b(list[1])
 
 
+
+    #
+    # a: left half of number
+    #
+
     def a (m, a=None):
         if a is not None:
             m.a = a
         return m.a
 
+
+
+    #
+    # b: right half of number
+    #
 
     def b (m, b=None):
         if b is not None:
@@ -335,17 +509,20 @@ class Construction:
         return m.b
 
 
-    def precision (m, p=None):
-        if p is not None:
-            m.p = p
-        return m.p
 
+    #
+    # Real part of number
+    #
 
     def re (m):
         return m[0]
 
 
+
+    #
+    # Imaginary part of number
+    #
+
     def im (m):
-        print ("m[1:] : ", m[1:])
-        return m.__class__((0,(m[1:])))
+        return m.__class__(((0,) + m[1:]))
 
