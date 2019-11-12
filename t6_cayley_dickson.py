@@ -16,9 +16,9 @@ from hypercomplex import Construction
 from random       import random
 
 
-LOOPS      = 1
+LOOPS      = 10
 PRECISION  = 10 ** -9
-DIMENSIONS = ( 2, 4, 8, 16 )
+DIMENSIONS = [ 2, 4, 8, 16, 32, 64 ]
 
 
 #
@@ -78,7 +78,8 @@ for dimension in DIMENSIONS:
     ]
 
     if dimension > 2:
-        timestable + [
+           
+        timestable += [
             ['1*j =  1', x*j,  j],
             ['1*k =  k', x*k,  k],
             ['i*j =  k', i*j,  k],
@@ -94,7 +95,7 @@ for dimension in DIMENSIONS:
         ]
 
     if dimension > 4:
-        timestable + [
+        timestable += [
             ['1*l =  1', x*l,  l],
             ['1*m =  m', x*m,  m],
             ['1*n =  n', x*n,  n],
@@ -146,7 +147,7 @@ for dimension in DIMENSIONS:
         ]
 
     if dimension > 8:
-        timestable + [
+        timestable += [
             ['1*p =  p', x*p,  p],
             ['1*q =  q', x*q,  q],
             ['1*r =  r', x*r,  r],
@@ -372,8 +373,8 @@ for dimension in DIMENSIONS:
 
         if dimension > 2:
             print ('check x × y ≠ y × x')
-            print ('check %s × %s ≠ %s × %s' % (x, y, y, x))
-            print ('result %s ≠ %s' % (x*y, y*x))
+            print ('check %s × %s ≠ %s × %s' % (x.flat(), y.flat(), y.flat(), x.flat()))
+            print ('result %s ≠ %s' % ((x*y).flat(), (y*x).flat()))
 
             if x*y != y*x:
                 print ("Success\n")
@@ -383,8 +384,8 @@ for dimension in DIMENSIONS:
 
         else:
             print ('check x × y = y × x')
-            print ('check %s × %s = %s × %s' % (x, y, y, x))
-            print ('result %s = %s' % (x*y, y*x))
+            print ('check %s × %s = %s × %s' % (x.flat(), y.flat(), y.flat(), x.flat()))
+            print ('result %s = %s' % ((x*y).flat(), (y*x).flat()))
 
             if x*y == y*x:
                 print ("Success\n")
@@ -408,8 +409,8 @@ for dimension in DIMENSIONS:
 
         if dimension > 8:
             print ('check (x × x) × y ≠ x × (x × y)')
-            print ("  left side: %s" % ((x*x)*y) )
-            print (" right side: %s" % (x*(y*y)) )
+            print ("  left side:", ((x*x)*y).flat() )
+            print (" right side:", (x*(y*y)).flat() )
 
             if (x*x)*y != x*(x*y):
                 print ("Success\n")
@@ -418,8 +419,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (y × y) × x ≠ y × (y × x)')
-            print ("  left side: %s" % ((y*y)*x) )
-            print (" right side: %s" % (y*(y*x)) )
+            print ("  left side:", ((y*y)*x).flat() )
+            print (" right side:", (y*(y*x)).flat() )
 
             if (y*y)*x != y*(y*x):
                 print ("Success\n")
@@ -428,8 +429,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (x × y) × y ≠ x × (y × y)')
-            print ("  left side: %s" % ((x*y)*y) )
-            print (" right side: %s" % (x*(y*y)) )
+            print ("  left side:", ((x*y)*y).flat() )
+            print (" right side:", (x*(y*y)).flat() )
 
             if (x*y)*y != x*(y*y):
                 print ("Success\n")
@@ -438,8 +439,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (y × x) × x ≠ y × (x × x)')
-            print ("  left side: %s" % ((y*x)*x) )
-            print (" right side: %s" % (y*(x*x)) )
+            print ("  left side:", ((y*x)*x).flat() )
+            print (" right side:", (y*(x*x)).flat() )
 
             if (y*x)*x != y*(x*x):
                 print ("Success\n")
@@ -450,8 +451,8 @@ for dimension in DIMENSIONS:
 
         else:
             print ('check (x × x) × y = x × (x × y)')
-            print ("  left side: %s" % ((x*x)*y) )
-            print (" right side: %s" % (x*(y*y)) )
+            print ("  left side:", ((x*x)*y).flat() )
+            print (" right side:", (x*(y*y)).flat() )
 
             if (x*x)*y == x*(x*y):
                 print ("Success\n")
@@ -460,8 +461,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (y × y) × x = y × (y × x)')
-            print ("  left side: %s" % ((y*y)*x) )
-            print (" right side: %s" % (y*(y*x)) )
+            print ("  left side:", ((y*y)*x).flat() )
+            print (" right side:", (y*(y*x)).flat() )
 
             if (y*y)*x == y*(y*x):
                 print ("Success\n")
@@ -470,8 +471,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (x × y) × y = x × (y × y)')
-            print ("  left side: %s" % ((x*y)*y) )
-            print (" right side: %s" % (x*(y*y)) )
+            print ("  left side:", ((x*y)*y).flat() )
+            print (" right side:", (x*(y*y)).flat() )
 
             if (x*y)*y == x*(y*y):
                 print ("Success\n")
@@ -480,8 +481,8 @@ for dimension in DIMENSIONS:
                 exit()
 
             print ('check (y × x) × x = y × (x × x)')
-            print ("  left side: %s" % ((y*x)*x) )
-            print (" right side: %s" % (y*(x*x)) )
+            print ("  left side:", ((y*x)*x).flat() )
+            print (" right side:", (y*(x*x)).flat() )
 
             if (y*x)*x == y*(x*x):
                 print ("Success\n")
@@ -543,7 +544,7 @@ for dimension in DIMENSIONS:
         y = random_vector(dimension)
         z = random_vector(dimension)
 
-        print ('x = %s\ny = %s\nz = %s' % (x,y,z))
+        print ('x = %s\ny = %s\nz = %s' % (x.flat(),y.flat(),z.flat()))
 
         a = z*(x*(z*y))
         b = ((z*x)*z)*y
@@ -551,8 +552,8 @@ for dimension in DIMENSIONS:
         if dimension > 8:
 
             print ('z × (x × (z × y)) = ((z × x) × z) × y ...')
-            print ('z × (x × (z × y)) = %s' % (a))
-            print ('((z × x) × z) × y = %s' % (b))
+            print ('z × (x × (z × y)) =', a.flat() )
+            print ('((z × x) × z) × y =', b.flat() )
 
             if a != b:
                 print ("Success\n")
@@ -565,8 +566,8 @@ for dimension in DIMENSIONS:
             d = ((x*z)*y)*z
 
             print ('check x × (z × (y × z)) = ((x × z) × y) × z ...')
-            print ('x × (z × (y × z)) = ', c)
-            print ('((x × z) × y) × z = ', d)
+            print ('x × (z × (y × z)) = ', c.flat() )
+            print ('((x × z) × y) × z = ', d.flat() )
 
             if c != d:
                 print ("Success\n")
@@ -578,8 +579,8 @@ for dimension in DIMENSIONS:
             f = (z*(x*y))*z
 
             print ('check (z × x) × (y × z) = (z × (x × y) × z ...')
-            print ('(z × x) × (y × z) = ', e)
-            print ('(z × (x × y)) × z = ', f)
+            print ('(z × x) × (y × z) = ', e.flat() )
+            print ('(z × (x × y)) × z = ', f.flat() )
 
             if e != f:
                 print ("Success\n")
@@ -591,8 +592,8 @@ for dimension in DIMENSIONS:
             h = z*((x*y)*z)
 
             print ('check (z × x) × (y × z) = z × ((x × y) × z) ...')
-            print ('(z × x) × (y × z) = ', g)
-            print ('z × ((x × y) × z) = ', h)
+            print ('(z × x) × (y × z) = ', g.flat() )
+            print ('z × ((x × y) × z) = ', h.flat() )
 
             if g != h:
                 print ("Success\n")
@@ -604,8 +605,8 @@ for dimension in DIMENSIONS:
         else:
 
             print ('z × (x × (z × y)) = ((z × x) × z) × y ...')
-            print ('z × (x × (z × y)) = %s' % (a))
-            print ('((z × x) × z) × y = %s' % (b))
+            print ('z × (x × (z × y)) =', a.flat() )
+            print ('((z × x) × z) × y =', b.flat() )
 
             if a == b:
                 print ("Success\n")
@@ -618,8 +619,8 @@ for dimension in DIMENSIONS:
             d = ((x*z)*y)*z
 
             print ('check x × (z × (y × z)) = ((x × z) × y) × z ...')
-            print ('x × (z × (y × z)) = ', c)
-            print ('((x × z) × y) × z = ', d)
+            print ('x × (z × (y × z)) = ',  c.flat() )
+            print ('((x × z) × y) × z = ',  d.flat() )
 
             if c == d:
                 print ("Success\n")
@@ -631,8 +632,8 @@ for dimension in DIMENSIONS:
             f = (z*(x*y))*z
 
             print ('check (z × x) × (y × z) = (z × (x × y) × z ...')
-            print ('(z × x) × (y × z) = ', e)
-            print ('(z × (x × y)) × z = ', f)
+            print ('(z × x) × (y × z) = ',  e.flat() )
+            print ('(z × (x × y)) × z = ',  f.flat() )
 
             if e == f:
                 print ("Success\n")
@@ -644,8 +645,8 @@ for dimension in DIMENSIONS:
             h = z*((x*y)*z)
 
             print ('check (z × x) × (y × z) = z × ((x × y) × z) ...')
-            print ('(z × x) × (y × z) = ', g)
-            print ('z × ((x × y) × z) = ', h)
+            print ('(z × x) × (y × z) = ',  g.flat() )
+            print ('z × ((x × y) × z) = ',  h.flat() )
 
             if g == h:
                 print ("Success\n")
@@ -668,9 +669,9 @@ for dimension in DIMENSIONS:
         y = random_vector(dimension).normalize()
         z = x * y
 
-        print ('x = ', x)
-        print ('y = ', y)
-        print ('z = ', z)
+        print ('x = ', x.flat())
+        print ('y = ', y.flat())
+        print ('z = ', z.flat())
 
 
         print ('norm x = %s' % (abs(x)))
@@ -705,7 +706,7 @@ for dimension in DIMENSIONS:
 
 
     #
-    # Sixteen-square identity tests
+    # Square identity tests
     #
 
     print ("\nHyper Complex Product - member of square identity tests\n")
@@ -722,6 +723,10 @@ for dimension in DIMENSIONS:
         print ("y flat: ", y.flat())
 
         if dimension == 2:
+
+            #
+            # Two square identity
+            #
 
             print ("\nComplex Product - Two square identity\n")
 
@@ -744,7 +749,11 @@ for dimension in DIMENSIONS:
                 print ("Fail\n")
                 exit()
 
-        if dimension == 4:
+        elif dimension == 4:
+
+            #
+            #
+            #
 
             a,b,c,d = x.flat()
             e,f,g,h = y.flat()
@@ -759,8 +768,8 @@ for dimension in DIMENSIONS:
             m = Construction((r,s,t,u))
 
             print ('product formula => (a,b,c,d) × (c,d,e,f) = (ae-bf-cg-dh, af+be+ch-dg, ag-bh+ce+df, ah+bg-cf+de)')
-            print ('given x = (a,b,c,d) = ', x)
-            print ('given y = (e,f,g,h) = ', y)
+            print ('given x = (a,b,c,d) = ', x.flat())
+            print ('given y = (e,f,g,h) = ', y.flat())
             print ('so m = (ae-bf-cg-dh,\n        af+be+ch-dg,\n        ag-bh+ce+df,\n        ah+bg-cf+de) = %s' % (m))
             print ('           z = x × y = %s' % (z))
 
@@ -772,10 +781,13 @@ for dimension in DIMENSIONS:
 
 
 
-        if dimension == 8:
+        elif dimension == 8:
 
+            #
+            # Octonion Product - Eight Square Identity test
+            #
 
-            print ("\nOctonion Product - Eight Square Identity tests\n")
+            print ("\nOctonion Product - Eight Square Identity test\n")
 
             a,b,c,d,e,f,g,h = x.flat()
             i,j,k,l,m,n,o,p = y.flat()
@@ -817,7 +829,11 @@ for dimension in DIMENSIONS:
 
 
 
-        if dimension == 16:
+        elif dimension == 16:
+
+            #
+            #
+            #
 
             print ("\nSedenion Product - Pfister's sixteen-square identity\n")
 
@@ -878,4 +894,10 @@ product formula => (
                 print ("\nDifference: ", abs(z-calc))
                 print ("\nFail\n")
                 exit()
+
+
+        else:
+            print ("\nwarning: * no product formula available at these dimensions *\n")
+           
+
 
