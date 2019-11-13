@@ -12,7 +12,8 @@
 
 import hypercomplex
 
-from hypercomplex import Construction
+#from hypercomplex import Construction as Construct
+from hypercomplex import RootFraction as Construct
 from random       import random
 from math         import sqrt
 
@@ -26,7 +27,7 @@ PRECISION = 10 ** -9
 #
 
 def random_vector ():
-    return Construction((
+    return Construct((
         random(), random(), random(), random(), random(), random(), random(), random(), 
         random(), random(), random(), random(), random(), random(), random(), random(), 
     ))
@@ -36,8 +37,8 @@ def random_vector ():
 print ("\nInstantiate state tests...\n")
 
 instantiate = [
-   [ Construction((1,2)), (1,2) ],
-   [ Construction((3,4)), (3,4) ]
+   [ Construct((1,2)), (1,2) ],
+   [ Construct((3,4)), (3,4) ]
 ]
 
 expect = (1,2)
@@ -65,13 +66,13 @@ for entry in instantiate:
 print ("\nTensor tests...\n")
 
 
-z1 = Construction((1,2))
-z2 = Construction((3,4))
+z1 = Construct((1,2))
+z2 = Construct((3,4))
 
 
 # setup zero (z) and one (o)
-z = Construction((1,0))
-o = Construction((0,1))
+z = Construct((1,0))
+o = Construct((0,1))
 
 
 brakets = [
@@ -111,7 +112,7 @@ brakets = [
 
 for item in brakets:
     title, calc, expected = item
-    expect = Construction(expected)
+    expect = Construct(expected)
 
     print (title)
     #print ("       calc : ", calc)
@@ -128,9 +129,9 @@ for item in brakets:
 
 
 
-gate_cnot     = Construction((sqrt(1/2), sqrt(1/2),0,0))
-gate_x        = Construction((0, 1))
-gate_hadamard = Construction((sqrt(1/2), sqrt(1/2)))
+gate_cnot     = Construct((sqrt(1/2), sqrt(1/2),0,0))
+gate_x        = Construct((0, 1))
+gate_hadamard = Construct((sqrt(1/2), sqrt(1/2)))
 
 def cnot(z1,z2):
     c = z1.tensor(z2)
@@ -219,7 +220,7 @@ cnot_tests = [
 
 for test in cnot_tests:
     title, calc, expected = test
-    expect = Construction(expected)
+    expect = Construct(expected)
 
     print (title)
     print ("       calc : ", calc.flat())
@@ -256,6 +257,8 @@ for test in hadamard_tests:
     print (title)
     print ("       calc : ", calc.flat())
     print ("     expect : ", expect.flat())
+    print ("       calc : ", calc)
+    print ("     expect : ", expect)
 
     if calc == expect:
         print ("Success\n")
@@ -270,24 +273,34 @@ for test in hadamard_tests:
 # 16 Step Circle Walk test
 #
 
-z = Construction((1,0))
+z = Construct((1,0))
 
 print ("\n16 Steps around the Unit Circle:\n")
 
 
-print ("Starting:", z.__repl__())
+starting = Construct(z.flat())
+print ("Starting: %s\n" % (starting))
+
 for i in range(16):
 
     if i % 2:
         gate = 'Hadamard'
         z2 = hadamard(z)
     else:
-        gate = 'XGate'
+        gate = '   XGate'
         z2 = xgate(z)
 
-    print ("  Step %s: %s(%s) = (%s) = %s" % (i+1, gate, z, z2.flat(), z2))
+    print ("  Step %s: %s(%s) = %s\n           = %s\n" % (i+1, gate, z, z2, z2.flat()))
     z = z2
-print ("   Ending: %s\n" % (z.__repl__()))
+
+print ("Ending: %s\n" % (z))
+
+
+if starting == z:
+    print ("Success - ending state == starting state\n")
+else:
+    print ("Fail - ending state != starting state\n")
+    exit()
 
 
 
@@ -372,7 +385,6 @@ for test in box_tests:
         print ("difference:", abs(target - expect_target))
         print ("Fail\n")
         #exit()
-
 
 
 
