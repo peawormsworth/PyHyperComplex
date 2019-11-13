@@ -9,8 +9,7 @@
 
 import math
 
-
-class Construction:
+class Construction(object):
 
     isquare = -1
     precision = 10 ** -9
@@ -155,7 +154,7 @@ class Construction:
     #
 
     def __invert__ (m):
-        return m.conj() * (1 / (abs(m) ** 2))
+        return m.conj()  / abs(m) ** 2
 
 
 
@@ -191,8 +190,8 @@ class Construction:
     #
 
     def replace (m, o):
-        m.a(o.a())
-        m.b(o.b())
+        m.a(o.a)
+        m.b(o.b)
         return m
 
 
@@ -320,6 +319,11 @@ class Construction:
     def geodesic_norm (m, o):
         return abs(log(~m * o))
 
+        # although there is no symbol in our math for it...
+        # this is equivelent to right division...
+        #
+        # return abs(log(m.__rtruediv__(o)))
+
     #
     # Tensor: $a->tensor($b) = A ⊗ B = (a,b) ⊗ (c,d) = (ac,ad,bc,bd)
     #
@@ -329,81 +333,6 @@ class Construction:
             return m.__class__((m.a.tensor(o), m.b.tensor(o)))
         except:
             return m.__class__((o * m.a,  o * m.b))
-
-
-
-    #
-    # return the coefficient of the basis for the provided index
-    #
-
-    def __getitem__ (m, i):
-        return m.flat()[i]
-
-
-
-    #
-    # return an ordered list of the coefficients
-    #
-
-    def flat (m):
-        try:
-           return m.a.flat() + m.b.flat()
-        except:
-           return (m.a, m.b)
-
-
-
-    #
-    # output this number as a string suitable for evaluation.
-    #   like json state format
-    #
-    def __repl__ (m):
-        return m.__class__.__name__ + '((' + ','.join(map(str, m.flat())) + '))'
-
-
-
-    #
-    # String format:
-    #   ordered imaginary units: i, j, k, etc.
-    #   no basis is shown for real units
-    #   no leading positive symbol
-    #
-
-    def __str__ (m):
-        string = ''
-        if abs(m):
-
-            for index, coefficient in enumerate(m.flat()):
-
-                if coefficient != 0: 
-                    sign = ''
-                    if coefficient < 0: 
-                        sign = '-' 
-                    elif len(string):
-                        sign = '+'
-
-                    value = abs(coefficient)
-    
-                    if index:
-                        unit = chr(ord('i') + index - 1)
-                    else:
-                        unit = ''
-
-                    string = string + sign + str(value) + unit
-
-        if string is None:
-            string = '0'
-
-        return string
-
-
-
-    #
-    # confirm the imaginary portions of the number are zero
-    #
-
-    def is_real (m):
-        return not m.im
 
 
 
@@ -429,6 +358,15 @@ class Construction:
 
     def level (m):
         return math.log(m.dimension())/math.log(2)
+
+
+
+    #
+    # confirm the imaginary portions of the number are zero
+    #
+
+    def is_real (m):
+        return not m.im
 
 
 
@@ -525,4 +463,120 @@ class Construction:
 
     def im (m):
         return m.__class__(((0,) + m[1:]))
+
+
+
+    #
+    # return the coefficient of the basis for the provided index
+    #
+
+    def __getitem__ (m, i):
+        return m.flat()[i]
+
+
+
+    #
+    # return an ordered list of the coefficients
+    #
+
+    def flat (m):
+        try:
+           return m.a.flat() + m.b.flat()
+        except:
+           return (m.a, m.b)
+
+
+
+    #
+    # String format:
+    #   ordered imaginary units: i, j, k, etc.
+    #   no basis is shown for real units
+    #   no leading positive symbol
+    #
+
+    def __str__ (m):
+        string = ''
+        if abs(m):
+
+            for index, coefficient in enumerate(m.flat()):
+
+                if coefficient != 0: 
+                    sign = ''
+                    if coefficient < 0: 
+                        sign = '-' 
+                    elif len(string):
+                        sign = '+'
+
+                    value = abs(coefficient)
+    
+                    if index:
+                        unit = chr(ord('i') + index - 1)
+                    else:
+                        unit = ''
+
+                    string = string + sign + str(value) + unit
+
+        if string is None:
+            string = '0'
+
+        return string
+
+
+
+    #
+    # replicate: output this number as a string suitable for evaluation
+    #
+
+    def __repr__ (m):
+        return "%r(%r)" % ( str(m.__class__.__name__), m[::] )
+
+
+from fractions import Fraction
+
+class RootFraction(Construction):
+
+    def __str__ (m):
+        string = ''
+        if abs(m):
+
+            for index, coefficient in enumerate(m.flat()):
+
+                if coefficient != 0: 
+                    sign = ''
+                    if coefficient < 0: 
+                        sign = '-'
+                    elif len(string):
+                        sign = '+'
+
+                    if string != '':
+                        sign = ' ' + sign + ' '
+
+    
+                    if index:
+                        unit = '·e' + str(index)
+                    else:
+                        unit = ''
+
+                    #value = abs(coefficient)
+                    #rootfraction = Fraction.from_float(float(abs(coefficient) ** 2))
+                    fraction = Fraction.from_float(float(abs(coefficient) ** 2)).limit_denominator(1000000)
+
+                    value = '√%s/%s' %  (fraction.numerator, fraction.denominator)
+
+                    if value == '√1/1':
+                        if unit == '':
+                            value = '1'
+                        else:
+                            value = ''
+
+                    string = string + sign + value + unit
+                    #string = string + sign + '√' + unit
+
+        if string is None:
+            string = '0'
+
+        string = '(' + string + ')'
+        return string
+
+
 
