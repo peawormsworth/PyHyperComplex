@@ -18,9 +18,7 @@ from hypercomplex import Construction
 ``b = Construction(3,-1)``
 
 ``sum = a + b
-
 difference = a - b
-
 product = a * b``
 
 division = a / b
