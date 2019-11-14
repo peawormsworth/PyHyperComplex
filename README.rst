@@ -1,55 +1,40 @@
-HyperComplex
-============
+# PyHyperComplex
 
-HyperComplex makes multi-dimensional Cayley-Dickson number calculations easy.
-Calculate to dimensions of any size with intuitive and fully overloaded math operation.
+python class for Cayley Dickson number construction and operation.
 
+### Usage:
 
-Usage
------
-
-Create:
-
-import hypercomplex
 from hypercomplex import Construction
 
-c1 = Construction( 4, 2)
-c2 = Construction(-1, 0.5)
+a = Construction(1,2)
 
-quaternion = Construction(1,2,3,4)
-octonion   = Construction(-1,7,6,5,8,3,2,4)
+b = Construction(3,-1)
 
-Display:
+sum = a + b
 
-print ("c1 = ", c1)
-print ("c2 = ", c2.flat())
-print ("Quaternion = ", quaternion)
-print ("Octonion   = ", c1.flat())
+difference = a - b
 
-Calculate:
+product = a * b
 
-product     = c1 * c2
-difference  = c1 - c2
-equality    = c1 == c2
-q_norm      = abs(quaternion)
-o_normalize = octonion.normalize
-c2_inverse  = ~ c2
-c1_squared  = c1 ** 2
-root_c2     = c2 ** 0.5
-log_o       = log(o)
-negative_c1 = -c1
+division = a / b
 
-# negate c1 and store it back into itself ...
-c1 *= -1
+conjugate = a.conjugate()
 
-# the 3rd element of the octonion...
-element3 = octonion[2]
+inverse = 1/a = ~a
 
-etc...
+if a == b:
+    print ("equal")
 
 
-Status
-------
+## Untested Features
 
-Work in progress. Expect frequent and total changes.
+power = a ** 2.1
+
+log_of_a = a.log()
+
+gn = a.geodesic_norm
+
+a.complex()
+
+t = a.tensor(b)
 
