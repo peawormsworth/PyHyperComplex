@@ -20,13 +20,13 @@ class Construction(object):
     #  Addition: z1+z2 = (a,b)+(c,d) = (a+c,b+d)
     #
 
-    def __add__ (m, o):
+    def __add__ (self, z):
         try:
-            a, b = m.a + o.a, m.b + o.b
+            a, b = self.a + z.a, self.b + z.b
         except:
-            a, b = m.a + o, m.b
+            a, b = self.a + z, self.b
 
-        return m.__class__((a, b))
+        return self.__class__((a, b))
 
 
 
@@ -34,8 +34,8 @@ class Construction(object):
     # reverse Addition
     #
 
-    def __radd__ (m, o):
-        return m + o
+    def __radd__ (self, z):
+        return self + z
 
 
 
@@ -43,16 +43,16 @@ class Construction(object):
     # referse Subtract
     #
 
-    def __rsub__ (m, o):
-        return -m + o
+    def __rsub__ (self, z):
+        return -self + z
 
 
     #
     # Subtraction: (a,b)-(c,d) = (a-c,b-d)
     #
 
-    def __sub__ (m, o):
-        return m + -o
+    def __sub__ (self, z):
+        return self + -z
 
 
 
@@ -60,8 +60,8 @@ class Construction(object):
     # Reverse Multiplication
     #
 
-    def __rmul__ (m, o):
-        return m * o
+    def __rmul__ (self, z):
+        return self * z
 
 
 
@@ -69,8 +69,8 @@ class Construction(object):
     # Reverse Division
     #
 
-    def __rtruediv__ (m, o):
-        return ~m * o
+    def __rtruediv__ (self, z):
+        return ~self * z
 
 
 
@@ -78,11 +78,11 @@ class Construction(object):
     # Division: z1/z2 = (a,b) × (c,d)⁻¹ = (a,b) × inverse(c,d)
     #
 
-    def __truediv__ (m, o):
-        if isinstance(o, Construction):
-            return  ~o * m
+    def __truediv__ (self, z):
+        if isinstance(z, Construction):
+            return  ~z * self
         else:
-            return 1/o * m
+            return 1/z * self
 
 
 
@@ -91,17 +91,17 @@ class Construction(object):
     #   where x* = conjugate(x) or x if x is a number
     #
 
-    def __mul__ (m, o):
-        a  = m.a
-        b  = m.b
+    def __mul__ (self, z):
+        a  = self.a
+        b  = self.b
 
         try:
-            c = o.a
+            c = z.a
         except:
-            c = o
+            c = z
 
         try:
-            d = o.b
+            d = z.b
         except:
             d = 0
 
@@ -125,18 +125,18 @@ class Construction(object):
         except:
             dc = d
 
-        return m.__class__(m.doubling_product(a,b,c,d,ac,bc,cc,dc))
+        return self.__class__(self.doubling_product(a,b,c,d,ac,bc,cc,dc))
 
 
 
     #
     # Doubling Product: multiplication rules for (a,b)×(c,d)
     #   given the values a,b,c,d,a★,b★,c★,d★
-    #  where x★ = conjugate of x
+    #  where z★ = conjugate of z
     #
 
-    def doubling_product (m,a,b,c,d,ac,bc,cc,dc):
-        return (a*c + m.isquare * dc*b, d*a + b*cc)
+    def doubling_product (self,a,b,c,d,ac,bc,cc,dc):
+        return (a*c + self.isquare * dc*b, d*a + b*cc)
 
 
 
@@ -144,8 +144,8 @@ class Construction(object):
     # Absolute Value = Norm: √(norm(a)²+norm(b)²)
     #
 
-    def __abs__ (m):
-        return math.sqrt(abs(m.a) ** 2 + abs(m.b) ** 2)
+    def __abs__ (self):
+        return math.sqrt(abs(self.a) ** 2 + abs(self.b) ** 2)
 
 
 
@@ -153,8 +153,8 @@ class Construction(object):
     # Invert: z⁻¹
     #
 
-    def __invert__ (m):
-        return m.conj()  / abs(m) ** 2
+    def __invert__ (self):
+        return self.conj()  / abs(self) ** 2
 
 
 
@@ -162,8 +162,8 @@ class Construction(object):
     # Power: z^x
     #
 
-    def __pow__ (m, power):
-        return abs(m) ** power * (math.cos(power * abs(m.im())) + m.im().normalize() * math.sin(power * abs(m.im())))
+    def __pow__ (self, power):
+        return abs(self) ** power * (math.cos(power * abs(self.im())) + self.im().normalize() * math.sin(power * abs(self.im())))
 
 
 
@@ -171,8 +171,8 @@ class Construction(object):
     # Negate: -z = -1 × z
     #
 
-    def __neg__ (m):
-        return -1 * m
+    def __neg__ (self):
+        return -1 * self
 
 
 
@@ -180,8 +180,8 @@ class Construction(object):
     # Positive: +z = z
     #
 
-    def __pos__ (m):
-        return m
+    def __pos__ (self):
+        return self
 
 
 
@@ -189,10 +189,10 @@ class Construction(object):
     # Replace: the existing coefficients with those of the given one
     #
 
-    def replace (m, o):
-        m.a(o.a)
-        m.b(o.b)
-        return m
+    def replace (self, z):
+        self.a(z.a)
+        self.b(z.b)
+        return self
 
 
 
@@ -200,8 +200,8 @@ class Construction(object):
     # Addition with assignment: z += x
     #
 
-    def __iadd__ (m, o):
-        return m.replace(m.__add__(o))
+    def __iadd__ (self, z):
+        return self.replace(self.__add__(z))
 
 
 
@@ -209,8 +209,8 @@ class Construction(object):
     # Subtraction with assignment: z -= x
     #
 
-    def __isub__ (m, o):
-        return m.replace(m.__sub__(o))
+    def __isub__ (self, z):
+        return self.replace(self.__sub__(z))
 
 
 
@@ -218,8 +218,8 @@ class Construction(object):
     # Multiplication with assignment: z *= x
     #
 
-    def __imul__ (m, o):
-        return m.replace(m.__mul__(o))
+    def __imul__ (self, z):
+        return self.replace(self.__mul__(z))
 
 
 
@@ -227,8 +227,8 @@ class Construction(object):
     # Division with assignment: z /= x
     #
 
-    def __idiv__ (m, o):
-        return m.replace(m.__div__(o))
+    def __idiv__ (self, z):
+        return self.replace(self.__div__(z))
 
 
 
@@ -236,8 +236,8 @@ class Construction(object):
     # Power with assignment: z **= x
     #
 
-    def __ipow__ (m, o):
-        return m.replace(m.__pow__(o))
+    def __ipow__ (self, z):
+        return self.replace(self.__pow__(z))
 
 
 
@@ -245,8 +245,9 @@ class Construction(object):
     # Equality condition: true if z = x
     #
 
-    def __eq__ (m, o):
-        return (m - o).norm() <= m.precision
+    def __eq__ (self, z):
+        #return (self - z).norm() <= self.precision
+        return abs(self - z) <= self.precision
 
 
 
@@ -254,8 +255,8 @@ class Construction(object):
     # Inequality: true is z ≠ x
     #
 
-    def __ne__ (m, o):
-        return not m == o
+    def __ne__ (self, z):
+        return not self == z
 
 
 
@@ -264,8 +265,8 @@ class Construction(object):
     #    as the real and imaginary components
     #
 
-    def __complex__ (m):
-       return complex( float(abs(m.a)), float(abs(m.b)) )
+    def __complex__ (self):
+       return complex( float(abs(self.a)), float(abs(self.b)) )
 
 
 
@@ -275,8 +276,8 @@ class Construction(object):
     #  Log: log(z) = x, so that e^x = z
     #
 
-    def log (m):
-        return math.log(abs(m.im())) + m.im().normalize() * math.acos(m.re() / abs(m))
+    def log (self):
+        return math.log(abs(self.im())) + self.im().normalize() * math.acos(self.re() / abs(self))
 
 
 
@@ -284,12 +285,12 @@ class Construction(object):
     #  Conjugate: z* = (a,b)* = (a*,-b)
     #
 
-    def conj (m):
+    def conj (self):
         try:
-            ac = m.a.conj()
+            ac = self.a.conj()
         except:
-            ac = m.a
-        return m.__class__((ac, -m.b))
+            ac = self.a
+        return self.__class__((ac, -self.b))
 
 
 
@@ -297,8 +298,8 @@ class Construction(object):
     # Norm: √(norm(a)²+norm(b)²) and norm(number) = number
     #
 
-    def norm (m):
-        return abs(m)
+    def norm (self):
+        return abs(self)
 
 
 
@@ -306,8 +307,8 @@ class Construction(object):
     # Normalize: z/|z| = zn, where norm of zn = 1
     #
 
-    def normalize (m):
-        return m / abs(m)
+    def normalize (self):
+        return self / abs(self)
 
 
 
@@ -316,23 +317,20 @@ class Construction(object):
     # ref: https://en.wikipedia.org/wiki/Quaternion#Geodesic_norm
     #
 
-    def geodesic_norm (m, o):
-        return abs(log(~m * o))
+    def geodesic_norm (self, z):
+        return abs(log(~self * z))
 
-        # although there is no symbol in our math for it...
-        # this is equivelent to right division...
-        #
-        # return abs(log(m.__rtruediv__(o)))
+
 
     #
     # Tensor: $a->tensor($b) = A ⊗ B = (a,b) ⊗ (c,d) = (ac,ad,bc,bd)
     #
 
-    def tensor (m, o):
+    def tensor (self, z):
         try:
-            return m.__class__((m.a.tensor(o), m.b.tensor(o)))
+            return self.__class__((self.a.tensor(z), self.b.tensor(z)))
         except:
-            return m.__class__((o * m.a,  o * m.b))
+            return self.__class__((z * self.a,  z * self.b))
 
 
 
@@ -340,8 +338,8 @@ class Construction(object):
     # return dimension count for this number
     #
 
-    def dimension(m):
-        return len(m.flat())
+    def dimension(self):
+        return len(self.flat())
 
 
 
@@ -356,8 +354,8 @@ class Construction(object):
     #    ...etc...
     #
 
-    def level (m):
-        return math.log(m.dimension())/math.log(2)
+    def level (self):
+        return math.log(self.dimension()) / math.log(2)
 
 
 
@@ -365,8 +363,8 @@ class Construction(object):
     # confirm the imaginary portions of the number are zero
     #
 
-    def is_real (m):
-        return not m.im
+    def is_real (self):
+        return not self.im
 
 
 
@@ -374,8 +372,8 @@ class Construction(object):
     # confirm this number is a 2d Complex number
     #
 
-    def is_complex (m):
-        return m.level() == 1
+    def is_complex (self):
+        return self.level() == 1
 
 
 
@@ -383,8 +381,8 @@ class Construction(object):
     # confirm this number is a 4d Quaternion number
     #
 
-    def is_quaternion  (m):
-        return m.level() == 2
+    def is_quaternion  (self):
+        return self.level() == 2
 
 
 
@@ -392,8 +390,8 @@ class Construction(object):
     # confirm this number is a 8d Octonion number
     #
 
-    def is_octonion (m):
-        return m.level() == 3
+    def is_octonion (self):
+        return self.level() == 3
 
 
 
@@ -401,8 +399,8 @@ class Construction(object):
     # confirm this number is a 16d Sedenion number
     #
 
-    def is_sedenion (m):
-        return m.level() == 4
+    def is_sedenion (self):
+        return self.level() == 4
 
 
 
@@ -411,18 +409,18 @@ class Construction(object):
     #   expects a 2^n element tuple parameter
     #
 
-    def __init__ (m, list):
+    def __init__ (self, list):
 
         h = len(list) // 2
         if h > 1:
-            m.a(m.__class__((list[:h])))
-            m.b(m.__class__((list[h:])))
+            self.a(self.__class__((list[:h])))
+            self.b(self.__class__((list[h:])))
         elif h < 1:
-            m.a(list[0])
-            m.b(0)
+            self.a(list[0])
+            self.b(0)
         else:
-            m.a(list[0])
-            m.b(list[1])
+            self.a(list[0])
+            self.b(list[1])
 
 
 
@@ -430,10 +428,10 @@ class Construction(object):
     # a: left half of number
     #
 
-    def a (m, a=None):
+    def a (self, a=None):
         if a is not None:
-            m.a = a
-        return m.a
+            self.a = a
+        return self.a
 
 
 
@@ -441,10 +439,10 @@ class Construction(object):
     # b: right half of number
     #
 
-    def b (m, b=None):
+    def b (self, b=None):
         if b is not None:
-            m.b = b
-        return m.b
+            self.b = b
+        return self.b
 
 
 
@@ -452,8 +450,8 @@ class Construction(object):
     # Real part of number
     #
 
-    def re (m):
-        return m[0]
+    def re (self):
+        return self[0]
 
 
 
@@ -461,8 +459,8 @@ class Construction(object):
     # Imaginary part of number
     #
 
-    def im (m):
-        return m.__class__(((0,) + m[1:]))
+    def im (self):
+        return self.__class__(((0,) + self[1:]))
 
 
 
@@ -470,8 +468,8 @@ class Construction(object):
     # return the coefficient of the basis for the provided index
     #
 
-    def __getitem__ (m, i):
-        return m.flat()[i]
+    def __getitem__ (self, index):
+        return self.flat()[index]
 
 
 
@@ -479,11 +477,20 @@ class Construction(object):
     # return an ordered list of the coefficients
     #
 
-    def flat (m):
+    def flat (self):
         try:
-           return m.a.flat() + m.b.flat()
+           return self.a.flat() + self.b.flat()
         except:
-           return (m.a, m.b)
+           return (self.a, self.b)
+
+
+
+    #
+    # copy this object state to a new one...
+    #
+
+    def copy (self):
+        return self.__class__(self.flat())
 
 
 
@@ -494,11 +501,11 @@ class Construction(object):
     #   no leading positive symbol
     #
 
-    def __str__ (m):
+    def __str__ (self):
         string = ''
-        if abs(m):
+        if abs(self):
 
-            for index, coefficient in enumerate(m.flat()):
+            for index, coefficient in enumerate(self.flat()):
 
                 if coefficient != 0: 
                     sign = ''
@@ -527,56 +534,77 @@ class Construction(object):
     # replicate: output this number as a string suitable for evaluation
     #
 
-    def __repr__ (m):
-        return "%r(%r)" % ( str(m.__class__.__name__), m[::] )
+    def __repr__ (self):
+        return "%r(%r)" % ( str(self.__class__.__name__), self[::] )
 
+#
+# RootFraction is a Construction with a different default string output.
+#  the format is a root fraction, rather then a float or decimal.
+#
+#  sample class output: t5_quantum.py
+#
 
 from fractions import Fraction
+from decimal   import Decimal
 
 class RootFraction(Construction):
 
-    def __str__ (m):
+    def __str__ (self):
         string = ''
-        if abs(m):
+        if abs(self):
 
-            for index, coefficient in enumerate(m.flat()):
+            for index, coefficient in enumerate(self.flat()):
 
                 if coefficient != 0: 
                     sign = ''
                     if coefficient < 0: 
                         sign = '-'
-                    elif len(string):
+                    #elif len(string):
+                    else:
                         sign = '+'
 
                     if string != '':
                         sign = ' ' + sign + ' '
 
+                    symbols = '₀₁₂₃₄₅₆₇₈₉'
     
-                    if index:
-                        unit = '·e' + str(index)
+                    #if index:
+                    if 1:
+                        unit = '·e'
+                        #unit = 'e'
+                        n = Decimal(index)
+                        if n == 0:
+                            unit = '·e₀'
+                        digits = 0
+                        while n >= 1:
+                            digits += 1
+                            n = n / 10
+                        #while n > 0:
+                        for _ in range(digits):
+                            n *= 10
+                            unit += symbols[math.floor(n)]
+                            n -= math.floor(n)
                     else:
-                        unit = ''
+                        unit = 'e₀'
 
-                    #value = abs(coefficient)
-                    #rootfraction = Fraction.from_float(float(abs(coefficient) ** 2))
                     fraction = Fraction.from_float(float(abs(coefficient) ** 2)).limit_denominator(1000000)
 
                     value = '√%s/%s' %  (fraction.numerator, fraction.denominator)
 
                     if value == '√1/1':
-                        if unit == '':
+                        #if unit == '':
+                        if 1:
                             value = '1'
                         else:
                             value = ''
 
+                    #string = string + sign + '·'.join([value, unit])
                     string = string + sign + value + unit
-                    #string = string + sign + '√' + unit
 
         if string is None:
             string = '0'
 
         string = '(' + string + ')'
+
         return string
-
-
 
