@@ -1,8 +1,10 @@
 # HyperComplex
 
-HyperComplex makes multi-dimensional Cayley-Dickson number calculations easy.
+HyperComplex makes multi-dimensional [Cayley-Dickson number][cayley_dickson] calculations easy.
 Calculate to dimensions of any size with intuitive and fully overloaded math
 operation.
+
+[The source of this project is available here][src].
 
 Structure
 ---------
@@ -75,10 +77,14 @@ other features...
 
 for more detailed examples look in to test_hypercomplex.py
 
-Reference
----------
+Related Topics
+--------------
 
-Wikipedia: [Cayley-Dickson construction][wiki]
+[Cayley-Dickson numbers][cayley_dickson]
+[Complex numbers][complex]
+[Quaternions][quaternion]
+[Octonions][octonion]
+[Sedenions][sedenion]
 
 Progress
 --------
@@ -88,4 +94,9 @@ structure and produess of Cayley Dickson algebra as a recursive process.
 process during hyperdimensional math operations. This code is not designed 
 to be efficient. This is educational code.
 
-[wiki]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
+[src]: https://github.com/peawormsworth/PyHyperComplex
+[cayley_dickson]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
+[complex]: https://en.wikipedia.org/wiki/Complex_number
+[quaternion]: https://en.wikipedia.org/wiki/Quaternion
+[octonion]: https://en.wikipedia.org/wiki/Octonion
+[sedenion]: https://en.wikipedia.org/wiki/Sedenion
