@@ -1,32 +1,28 @@
 #!/usr/bin/python3
-#
-#  Hypercomplex - Unit Tests
-#
-#    general class wide, product table, algebraic, identity and quantum emulation tests
-#
-#     file: test_hypercomplex.py
-#   source: https://github.com/peawormsworth/PyHyperComplex
-#   author: Jeffrey B Anderson - truejeffanderson at gmail.com
-#
-#
+"""
+Hypercomplex - Unit Tests
+
+general class wide, product table, algebraic, identity and quantum emulation tests
+
+file: test_hypercomplex.py
+source: https://github.com/peawormsworth/PyHyperComplex
+author: Jeffrey B Anderson - truejeffanderson at gmail.com
+"""
 
 import unittest
 
 from hypercomplex import Construction as Construct
 from hypercomplex import RootFraction
 from random       import random
-from math         import pi as π
-from math         import sqrt
+from math         import sqrt, pi as π
+
+def random_vector(dimension=2):
+    """generate a random complex number"""
+    return Construct([random() for _ in range(dimension)])
 
 
-def random_vector ():
-    return Construct((random(), random()))
-
-
-#
-# Attributes test
-#
 class TestAttributes(unittest.TestCase):
+    """Attribute tests"""
     ATTRIBUTES = [
         '__add__',     '__radd__',    '__rsub__',    '__sub__',       '__rmul__',    '__rtruediv__',
         '__truediv__', '__mul__',     '__abs__',     '__invert__',    '__pow__',     '__neg__',
@@ -36,44 +32,46 @@ class TestAttributes(unittest.TestCase):
         'tensor',      'is_real',     'is_complex',  'is_quaternion', 'is_octonion', 'is_sedenion',
         'flat',        'a',           'b',           're',            'im'
     ]
+
     def test_attribute (self):
+        """verify the existence of attributes names from a list"""
         z = random_vector()
         for attribute in self.ATTRIBUTES:
             self.assertTrue(attribute in dir(z))
 
 
-#
-# Right/Left order operator tests
-#
 class TestRightLeftOperators(unittest.TestCase):
+    """Right/Left order operator tests"""
     loops = 1
 
     def test_left_right_multiplication (self, loops=loops):
+        """multiplication verification"""
         for n in range(loops):
             z1 = random_vector()
             z2 = random_vector()
             self.assertEqual(z1*z2, z2*z1, "%s != %s" % (z1*z2, z2*z1))
 
     def test_right_left_addition (self, loops = loops):
+        """addition verification"""
         for n in range(loops):
             z1 = random_vector()
             z2 = random_vector()
             self.assertEqual(z1+z2, z2+z1, "%s != %s" % (z1+z2, z2+z1))
 
     def test_right_left_subtraction (self, loops=loops):
+        """subtraction verification"""
         for n in range(loops):
             z1 = random_vector()
             z2 = random_vector()
             self.assertEqual(z1-z2, -(z2-z1), "%s != %s" % (z1-z2, -(z2-z1)))
 
 
-#
-# Dimension type matching 
-#
 class TestDimensions(unittest.TestCase):
+    """Dimension type matching"""
     LOOPS = 1
 
     def test_complex_dimensions (self):
+        """Check that a number intended to be complex says that it is"""
         for n in range(self.LOOPS):
 
             z = Construct([random() for _ in range(2)])
@@ -84,6 +82,7 @@ class TestDimensions(unittest.TestCase):
             self.assertNotEqual(z.dimension(), 32)
 
     def test_quaternion_dimensions (self):
+        """Check that a number intended to be a quaternion says that it is"""
         for n in range(self.LOOPS):
 
             z = Construct([random() for _ in range(4)])
@@ -94,6 +93,7 @@ class TestDimensions(unittest.TestCase):
             self.assertNotEqual(z.dimension(), 32)
 
     def test_octonion_dimensions (self):
+        """Check that a number intended to be a octonion says that it is"""
         for n in range(self.LOOPS):
 
             z = Construct([random() for _ in range(8)])
@@ -104,6 +104,7 @@ class TestDimensions(unittest.TestCase):
             self.assertNotEqual(z.dimension(), 32)
 
     def test_sedenion_dimensions (self):
+        """Check that a number intended to be a sedenion says that it is"""
         for n in range(self.LOOPS):
 
             z = Construct([random() for _ in range(16)])
@@ -114,6 +115,7 @@ class TestDimensions(unittest.TestCase):
             self.assertNotEqual(z.dimension(), 32)
 
     def test_32ion (self):
+        """Check that a number intended to be 32 dimensional knows that it is"""
         for n in range(self.LOOPS):
 
             z = Construct([random() for _ in range(32)])
@@ -124,12 +126,11 @@ class TestDimensions(unittest.TestCase):
             self.assertEqual(z.dimension(), 32)
 
 
-#
-# Multiplication Table tests
-#
-class TestMultiplicationTable (unittest.TestCase):
+class TestMultiplicationTable(unittest.TestCase):
+    """Multiplication Table tests"""
 
     def test_complex_unit_table (self):
+        """complex table"""
         x = Construct((1,0))
         i = Construct((0,1))
         timestable = [
@@ -142,7 +143,8 @@ class TestMultiplicationTable (unittest.TestCase):
             title, calc, expect = entry[::]
             self.assertEqual(calc, expect)
 
-    def test_quaternion_unit_table (self):
+    def test_quaternion_unit_table(self):
+        """quaternion table"""
         x = Construct((1,0,0,0))
         i = Construct((0,1,0,0))
         j = Construct((0,0,1,0))
@@ -170,7 +172,8 @@ class TestMultiplicationTable (unittest.TestCase):
             self.assertEqual(calc, expect)
  
 
-    def test_octonion_unit_table (self):
+    def test_octonion_unit_table(self):
+        """octonion table"""
         x = Construct((1,0,0,0,0,0,0,0))
         i = Construct((0,1,0,0,0,0,0,0))
         j = Construct((0,0,1,0,0,0,0,0))
@@ -249,7 +252,8 @@ class TestMultiplicationTable (unittest.TestCase):
             title, calc, expect = entry[::]
             self.assertEqual(calc, expect)
 
-    def test_sedenion_unit_table (self):
+    def test_sedenion_unit_table(self):
+        """sedenion table"""
         x = Construct((1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))
         i = Construct((0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0))
         j = Construct((0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0))
@@ -529,12 +533,10 @@ class TestMultiplicationTable (unittest.TestCase):
             self.assertEqual(calc, expect)
 
  
-#
-# Commutative Product tests
-#
-class TestCommutative (unittest.TestCase):
+class TestCommutative(unittest.TestCase):
+    """Commutative Product tests"""
     LOOPS = 10
-    def _is_commutative (self, dimensions=0):
+    def _is_commutative(self, dimensions=0):
         for n in range(self.LOOPS):
             x = random_vector(dimensions)
             y = random_vector(dimensions)
@@ -543,29 +545,27 @@ class TestCommutative (unittest.TestCase):
             else:
                 self.assertEqual(x*y,y*x)
         
-    def test_complex (self):
+    def test_complex(self):
         self._is_commutative(dimensions=2)
 
-    def test_quaternion (self):
+    def test_quaternion(self):
         self._is_commutative(dimensions=4)
 
-    def test_octonion (self):
+    def test_octonion(self):
         self._is_commutative(dimensions=8)
 
-    def test_sedenion (self):
+    def test_sedenion(self):
         self._is_commutative(dimensions=16)
 
-    def test_32ion (self):
+    def test_32ion(self):
         self._is_commutative(dimensions=32)
 
-    def test_64ion (self):
+    def test_64ion(self):
         self._is_commutative(dimensions=64)
 
 
-#
-# Weak Alternative Condition tests
-#
-class TestWeakAlternativeCondition (unittest.TestCase):
+class TestWeakAlternativeCondition(unittest.TestCase):
+    """Weak Alternative Condition tests"""
     LOOPS = 1
     def _is_weak_alternative(self, dimensions=0):
         for n in range(self.LOOPS):
@@ -586,30 +586,30 @@ class TestWeakAlternativeCondition (unittest.TestCase):
                 self.assertNotEqual((x*y)*y, x*(y*y))
                 self.assertNotEqual((y*y)*x, y*(y*x))
 
-    def test_complex (self):
+    def test_complex(self):
         self._is_weak_alternative(dimensions=2)
 
-    def test_quaternion (self):
+    def test_quaternion(self):
         self._is_weak_alternative(dimensions=4)
 
-    def test_octonion (self):
+    def test_octonion(self):
         self._is_weak_alternative(dimensions=8)
 
-    def test_sedenion (self):
+    def test_sedenion(self):
         self._is_weak_alternative(dimensions=16)
 
-    def test_32ion (self):
+    def test_32ion(self):
         self._is_weak_alternative(dimensions=32)
 
-    def test_64ion (self):
+    def test_64ion(self):
         self._is_weak_alternative(dimensions=64)
 
 
-#
-# Diophantus identity test
-#  Brahmagupta–Fibonacci / Diophantus identity
-#
-class TestDiophantusIdentity (unittest.TestCase):
+class TestDiophantusIdentity(unittest.TestCase):
+    """
+    Diophantus identity test
+    Brahmagupta–Fibonacci / Diophantus identity
+    """
     PRECISION = 10**-9
     LOOPS = 1
     def _is_diophantus_identity(self, dimensions=0):
@@ -621,29 +621,27 @@ class TestDiophantusIdentity (unittest.TestCase):
             else:
                 self.assertAlmostEqual(abs(x) * abs(y), abs(x*y), delta=self.PRECISION)
 
-    def test_complex (self):
+    def test_complex(self):
         self._is_diophantus_identity(dimensions=2)
 
-    def test_quaternion (self):
+    def test_quaternion(self):
         self._is_diophantus_identity(dimensions=4)
 
-    def test_octonion (self):
+    def test_octonion(self):
         self._is_diophantus_identity(dimensions=8)
 
-    def test_sedenion (self):
+    def test_sedenion(self):
         self._is_diophantus_identity(dimensions=16)
 
-    def test_32ion (self):
+    def test_32ion(self):
         self._is_diophantus_identity(dimensions=32)
 
-    def test_64ion (self):
+    def test_64ion(self):
         self._is_diophantus_identity(dimensions=64)
 
 
-#
-# Moufang condition tests
-#
-class TestMoufangCondition (unittest.TestCase):
+class TestMoufangCondition(unittest.TestCase):
+    """Moufang condition tests"""
     LOOPS = 1
     def _is_moufang_condition(self, dimensions=0):
         for n in range(self.LOOPS):
@@ -669,29 +667,27 @@ class TestMoufangCondition (unittest.TestCase):
                 self.assertEqual(e,f)
                 self.assertEqual(g,h)
 
-    def test_complex (self):
+    def test_complex(self):
         self._is_moufang_condition(dimensions=2)
 
-    def test_quaternion (self):
+    def test_quaternion(self):
         self._is_moufang_condition(dimensions=4)
 
-    def test_octonion (self):
+    def test_octonion(self):
         self._is_moufang_condition(dimensions=8)
 
-    def test_sedenion (self):
+    def test_sedenion(self):
         self._is_moufang_condition(dimensions=16)
 
-    def test_32ion (self):
+    def test_32ion(self):
         self._is_moufang_condition(dimensions=32)
 
-    def test_64ion (self):
+    def test_64ion(self):
         self._is_moufang_condition(dimensions=64)
 
 
-#
-# Power Associative tests
-#
-class TestPowerAssociative (unittest.TestCase):
+class TestPowerAssociative(unittest.TestCase):
+    """Power Associative tests"""
     PRECISION = 10**-9
     LOOPS = 1
     def _is_power_associative(self, dimensions=0):
@@ -706,31 +702,29 @@ class TestPowerAssociative (unittest.TestCase):
             else:
                 self.assertAlmostEqual(abs(z),1,delta=self.PRECISION)
 
-    def test_complex (self):
+    def test_complex(self):
         self._is_power_associative(dimensions=2)
 
-    def test_quaternion (self):
+    def test_quaternion(self):
         self._is_power_associative(dimensions=4)
 
-    def test_octonion (self):
+    def test_octonion(self):
         self._is_power_associative(dimensions=8)
 
-    def test_sedenion (self):
+    def test_sedenion(self):
         self._is_power_associative(dimensions=16)
 
-    def test_32ion (self):
+    def test_32ion(self):
         self._is_power_associative(dimensions=32)
 
-    def test_64ion (self):
+    def test_64ion(self):
         self._is_power_associative(dimensions=64)
 
 
-#
-# Two square identity
-#
-class TestTwoSquareIdentity (unittest.TestCase):
+class TestTwoSquareIdentity(unittest.TestCase):
+    """Two square identity"""
 
-    def test_two_square_identity (self):
+    def test_two_square_identity(self):
         x = random_vector(2)
         y = random_vector(2)
         a, b = x
@@ -739,11 +733,9 @@ class TestTwoSquareIdentity (unittest.TestCase):
         self.assertEqual(form, x*y)
 
 
-#
-# Four square identity
-#
-class TestFourSquareIdentity (unittest.TestCase):
-    def test_four_square_identity (self):
+class TestFourSquareIdentity(unittest.TestCase):
+    """Four square identity"""
+    def test_four_square_identity(self):
         x = random_vector(4)
         y = random_vector(4)
         a,b,c,d = x
@@ -756,11 +748,9 @@ class TestFourSquareIdentity (unittest.TestCase):
         self.assertEqual(form, x*y)
 
 
-#
-# Eight square identity
-#
-class TestEightSquareIdentity (unittest.TestCase):
-    def test_eight_square_identity (self):
+class TestEightSquareIdentity(unittest.TestCase):
+    """Eight square identity"""
+    def test_eight_square_identity(self):
         x = random_vector(8)
         y = random_vector(8)
         a,b,c,d,e,f,g,h = x
@@ -778,11 +768,10 @@ class TestEightSquareIdentity (unittest.TestCase):
         self.assertEqual(form, x*y)
 
 
-#
-# Sixteen square identity
-#
-class TestSixteenSquareIdentity (unittest.TestCase):
-    def test_sixteen_square_identity (self):
+class TestSixteenSquareIdentity(unittest.TestCase):
+    """Sixteen square identity"""
+
+    def test_sixteen_square_identity(self):
         x = random_vector(16)
         y = random_vector(16)
         a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 = x
@@ -808,10 +797,9 @@ class TestSixteenSquareIdentity (unittest.TestCase):
         self.assertEqual(form, x*y)
 
 
-#
-# Quatum Tests
-#
-class TestQuantumEmulator (unittest.TestCase):
+class TestQuantumEmulator(unittest.TestCase):
+    """Quatum Tests"""
+
     gate_cnot     = Construct((sqrt(1/2), sqrt(1/2),0,0))
     gate_x        = Construct((0, 1))
     gate_hadamard = Construct((sqrt(1/2), sqrt(1/2)))
@@ -827,11 +815,11 @@ class TestQuantumEmulator (unittest.TestCase):
         return self.gate_hadamard / z
 
 
-    def test_instantiate (self):
+    def test_instantiate(self):
         for t in [(1,2),(3,4),(-1,2)]:
             self.assertEqual(RootFraction(t).flat(), t)
 
-    def test_tensor (self):
+    def test_tensor(self):
         z1 = Construct((1,2))
         z2 = Construct((3,4))
         z  = Construct((1,0))
@@ -872,10 +860,8 @@ class TestQuantumEmulator (unittest.TestCase):
             expect = Construct(expected)
             self.assertEqual(calc, expect)
 
-    #
-    # XGATE: Flip along √i axis. 1 => 0, 0 => 1
-    #
     def test_xgate (self):
+        """XGATE: Flip along √i axis. 1 => 0, 0 => 1"""
         z  = Construct((1,0))
         o  = Construct((0,1))
         zz = z.tensor(z)
@@ -898,10 +884,8 @@ class TestQuantumEmulator (unittest.TestCase):
             title, calc, expect = test
             self.assertEqual(calc, expect)
 
-    #
-    # CNOT: second bit flip controlled by the first
-    #
     def test_cnot (self):
+        """CNOT: second bit flip controlled by the first"""
         z  = Construct((1,0))
         o  = Construct((0,1))
         cnot_tests = [
@@ -915,10 +899,8 @@ class TestQuantumEmulator (unittest.TestCase):
             expect = Construct(expected)
             self.assertEqual(calc, expect)
 
-    #
-    # Hadamard gate test
-    #
     def test_hadamard (self):
+        """Hadamard gate test"""
         z  = Construct((1,0))
         o  = Construct((0,1))
         zz = z.tensor(z)
@@ -939,13 +921,10 @@ class TestQuantumEmulator (unittest.TestCase):
         ]
         for test in hadamard_tests:
             title, calc, expected = test
-            #expect = Construct(expected)
             self.assertEqual(calc, expected)
 
-    #
-    # 16 Step Circle Walk test
-    #
     def test_16_steps (self):
+        """16 Step Circle Walk test"""
         z = Construct((1,0))
         steps = [
             (0,1),
@@ -979,10 +958,8 @@ class TestQuantumEmulator (unittest.TestCase):
         self.assertEqual(z, starting)
 
 
-#
-# Black box: constant 0, constant 1, identity and negate
-#
-class TestBlackBox (unittest.TestCase):
+class TestBlackBox(unittest.TestCase):
+    """Black box: constant 0, constant 1, identity and negate"""
     gate_cnot     = Construct((sqrt(1/2), sqrt(1/2),0,0))
     gate_x        = Construct((0, 1))
     gate_hadamard = Construct((sqrt(1/2), sqrt(1/2)))
@@ -1053,13 +1030,6 @@ class TestBlackBox (unittest.TestCase):
         target  = self.xgate(target)
         self.assertEqual(control, o)
         self.assertEqual(target,  o)
-
-
-#
-# generate a random complex number ...
-#
-def random_vector (dimension=2):
-    return Construct([random() for _ in range(dimension)])
 
 
 if __name__ == '__main__':
