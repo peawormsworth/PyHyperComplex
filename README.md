@@ -15,10 +15,7 @@ of a Cayley-Dickson number of that dimension.
 Usage
 -----
 
-Overloaded math operations provide intuitive coding...
-
     from hypercomplex import Construction
-
 
     q1 = Construction( 4, 2, 3, 7)
 
@@ -32,11 +29,11 @@ Overloaded math operations provide intuitive coding...
 
     division = c1 / c2
 
-    # store product in c1...
+store product in c1
 
     c1 *= c2
 
-    # other features...
+other features...
 
     norm = abs(c1)
 
@@ -57,12 +54,12 @@ Overloaded math operations provide intuitive coding...
     as_a_list = c1[::]
 
     conjugate = c1.conj()
+
     arc_distance = c1.geodesic_norm(c2)
 
     quaternion = c1.tensor(c2)
 
     if c1.dimension == 4:
-
 
         print ("I am a Quaternion")
 
@@ -73,6 +70,14 @@ Overloaded math operations provide intuitive coding...
     if c1.is_complex:
 
         print ("I am a 2 dimensional complex number")
+
+for more detailed examples look in to test_hypercomplex.py
+
+Reference
+---------
+
+[Cayley-Dickson Construction wikipedia][wiki]
+
 Progress
 --------
 
@@ -81,6 +86,4 @@ structure and produess of Cayley Dickson algebra as a recursive process.
 process during hyperdimensional math operations. This code is not designed 
 to be efficient. This is educational code.
 
-Credit
-------
-Jeff Anderson : AGPL-3.0
+[wiki]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
