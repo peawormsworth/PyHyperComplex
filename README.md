@@ -15,6 +15,8 @@ of a Cayley-Dickson number of that dimension.
 Usage
 -----
 
+general operation...
+
     from hypercomplex import Construction
 
     q1 = Construction( 4, 2, 3, 7)
@@ -76,7 +78,7 @@ for more detailed examples look in to test_hypercomplex.py
 Reference
 ---------
 
-[Cayley-Dickson Construction wikipedia][wiki]
+Wikipedia: [Cayley-Dickson construction][wiki]
 
 Progress
 --------
