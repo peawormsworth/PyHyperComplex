@@ -8,12 +8,14 @@ Structure
 ---------
 
 Each object has two things, a and b, which are either two numbers or two
-similar objects. The object will be a tree contain a total of 2^depth numbers.
+similar objects. The object is a tree contain a total of 2^depth numbers.
 The total of numbers is the dimension. These numbers represent the coefficients
 of a Cayley-Dickson number of that dimension.
 
 Usage
 -----
+
+Overloaded math operations provide intuitive coding...
 
     from hypercomplex import Construction
 
@@ -78,3 +80,7 @@ This work in progress is educational code. It is designed to follow the
 structure and produess of Cayley Dickson algebra as a recursive process.
 process during hyperdimensional math operations. This code is not designed 
 to be efficient. This is educational code.
+
+Credit
+------
+Jeff Anderson : AGPL-3.0
