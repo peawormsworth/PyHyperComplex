@@ -81,9 +81,13 @@ Related Topics
 --------------
 
 [Cayley-Dickson numbers][cayley_dickson]
+
 [Complex numbers][complex]
+
 [Quaternions][quaternion]
+
 [Octonions][octonion]
+
 [Sedenions][sedenion]
 
 Progress
