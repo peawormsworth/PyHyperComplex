@@ -19,7 +19,7 @@ of a Cayley-Dickson number of that dimension.
 Usage
 -----
 
-general operation...
+basic operations...
 
     from hypercomplex import Construction
 
@@ -35,11 +35,17 @@ general operation...
 
     division = c1 / c2
 
-store product in c1
+operations with assignment...
+
+    c1 += c2
+
+    c1 -= c2
 
     c1 *= c2
 
-other features...
+    c1 /= c2
+
+advanced features...
 
     norm = abs(c1)
 
@@ -77,7 +83,7 @@ other features...
 
         print ("I am a 2 dimensional complex number")
 
-for more detailed examples look in to test_hypercomplex.py
+further examples provided in [test_hypercomplex.py][test_code]
 
 Related Topics
 --------------
@@ -95,12 +101,12 @@ Related Topics
 Progress
 --------
 
-This work in progress is educational code. It is designed to follow the
-structure and produess of Cayley Dickson algebra as a recursive process.
-process during hyperdimensional math operations. This code is not designed 
-to be efficient. This is educational code.
+This project is a work in progress. It is designed to mimic the structure
+of Cayley Dickson algebra as a recursive process for hyperdimensional math
+operations. This code is not efficient. This is educational code.
 
 [src]: https://github.com/peawormsworth/PyHyperComplex
+[test_code]: https://github.com/peawormsworth/PyHyperComplex/blob/master/test_hypercomplex.py
 [project]: https://test.pypi.org/project/hypercomplex-peasworth/
 [cayley_dickson]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
 [complex]: https://en.wikipedia.org/wiki/Complex_number
