@@ -15,61 +15,61 @@ of a Cayley-Dickson number of that dimension.
 Usage
 -----
 
-from hypercomplex import Construction
+    from hypercomplex import Construction
 
-q1 = Construction( 4, 2, 3, 7)
+    q1 = Construction( 4, 2, 3, 7)
 
-q2 = Construction(-1, 0.5, 2, 6)
+    q2 = Construction(-1, 0.5, 2, 6)
 
-sum = c1 + c2
+    sum = c1 + c2
 
-difference = c1 - c2
+    difference = c1 - c2
 
-product = c1 * c2
+    product = c1 * c2
 
-division = c1 / c2
+    division = c1 / c2
 
-...store product in c1...
+    .    ..store product in c1...
 
-c1 *= c2
+    c1 *= c2
 
-...other features...
+    ...other features...
 
-norm = abs(c1)
+    norm = abs(c1)
 
-invert = ~ c1
+    invert = ~ c1
 
-root = c1 ** 0.5
+    root = c1 ** 0.5
 
-negative = -c1
+    negative = -c1
 
-if c1 == c2:
+    if c1 == c2:
 
-    print ("equal")
+        print ("equal")
 
-complex_type = c1.complex()
+    complex_type = c1.complex()
 
-logarithm = c1.log()
+    logarithm = c1.log()
 
-as_a_list = c1[::]
+    as_a_list = c1[::]
 
-conjugate = c1.conj()
+    conjugate = c1.conj()
 
-arc_distance = c1.geodesic_norm(c2)
+    arc_distance = c1.geodesic_norm(c2)
 
-quaternion = c1.tensor(c2)
+    quaternion = c1.tensor(c2)
 
-if c1.dimension == 4:
+    if c1.dimension == 4:
 
-    print ("I am a Quaternion")
+        print ("I am a Quaternion")
 
-if c1.is_real:
+    if c1.is_real:
 
-    print ("I am entirely real")
+        print ("I am entirely real")
 
-if c1.is_complex:
+    if c1.is_complex:
 
-    print ("I am a 2 dimensional complex number")
+        print ("I am a 2 dimensional complex number")
 
 Progress
 --------
