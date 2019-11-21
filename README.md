@@ -6,6 +6,8 @@ operation.
 
 [The source of this project is available here][src].
 
+[Project Hosting][project]
+
 Structure
 ---------
 
@@ -99,6 +101,7 @@ process during hyperdimensional math operations. This code is not designed
 to be efficient. This is educational code.
 
 [src]: https://github.com/peawormsworth/PyHyperComplex
+[project]: https://test.pypi.org/project/hypercomplex-peasworth/
 [cayley_dickson]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
 [complex]: https://en.wikipedia.org/wiki/Complex_number
 [quaternion]: https://en.wikipedia.org/wiki/Quaternion
