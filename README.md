@@ -1,56 +1,80 @@
-HyperComplex
-============
+# HyperComplex
 
 HyperComplex makes multi-dimensional Cayley-Dickson number calculations easy.
-Calculate to dimensions of any size with intuitive and fully overloaded math operation.
+Calculate to dimensions of any size with intuitive and fully overloaded math
+operation.
 
+Structure
+---------
+
+Each object has two things, a and b, which are either two numbers or two
+similar objects. The object will be a tree contain a total of 2^depth numbers.
+The total of numbers is the dimension. These numbers represent the coefficients
+of a Cayley-Dickson number of that dimension.
 
 Usage
 -----
 
-Create:
-
-import hypercomplex
 from hypercomplex import Construction
 
-c1 = Construction( 4, 2)
-c2 = Construction(-1, 0.5)
+q1 = Construction( 4, 2, 3, 7)
 
-quaternion = Construction(1,2,3,4)
-octonion   = Construction(-1,7,6,5,8,3,2,4)
+q2 = Construction(-1, 0.5, 2, 6)
 
-Display:
+sum = c1 + c2
 
-print ("c1 = ", c1)
-print ("c2 = ", c2.flat())
-print ("Quaternion = ", quaternion)
-print ("Octonion   = ", c1.flat())
+difference = c1 - c2
 
-Calculate:
+product = c1 * c2
 
-product     = c1 * c2
-difference  = c1 - c2
-equality    = c1 == c2
-q_norm      = abs(quaternion)
-o_normalize = octonion.normalize
-c2_inverse  = ~ c2
-c1_squared  = c1 ** 2
-root_c2     = c2 ** 0.5
-log_o       = log(o)
-negative_c1 = -c1
+division = c1 / c2
 
-# negate c1 and store it back into itself ...
-c1 *= -1
+...store product in c1...
 
-# the 3rd element of the octonion...
-element3 = octonion[2]
+c1 *= c2
 
-etc...
+...other features...
 
+norm = abs(c1)
 
-Status
-------
+invert = ~ c1
 
-Work in progress. Expect frequent and total changes.
+root = c1 ** 0.5
 
+negative = -c1
 
+if c1 == c2:
+
+    print ("equal")
+
+complex_type = c1.complex()
+
+logarithm = c1.log()
+
+as_a_list = c1[::]
+
+conjugate = c1.conj()
+
+arc_distance = c1.geodesic_norm(c2)
+
+quaternion = c1.tensor(c2)
+
+if c1.dimension == 4:
+
+    print ("I am a Quaternion")
+
+if c1.is_real:
+
+    print ("I am entirely real")
+
+if c1.is_complex:
+
+    print ("I am a 2 dimensional complex number")
+
+Progress
+--------
+
+This work in progress is educational code. It is designed to follow the
+structure and produess of Cayley Dickson algebra as a recursive process.
+process during hyperdimensional math operations. This code is not designed 
+to be efficient. This is educational code.
